@@ -16,8 +16,11 @@ namespace StarterAssets
     {
         [Header("Player")]
         [Tooltip("Move speed of the character in m/s")]
-        public float MoveSpeed = 2.0f;
+        public float MoveSpeed = 3.5f;
 
+        [Tooltip("Walk speed of the character in m/s")]
+        public float WalkSpeed = 2.0f;
+        
         [Tooltip("Sprint speed of the character in m/s")]
         public float SprintSpeed = 5.335f;
 
@@ -32,9 +35,16 @@ namespace StarterAssets
         public AudioClip[] FootstepAudioClips;
         [Range(0, 1)] public float FootstepAudioVolume = 0.5f;
 
-        [Space(10)]
+        [Space(10)] 
+        [Tooltip("The max number of jumps the player can perform")]
+        public int MaxJumps = 2;
+        
         [Tooltip("The height the player can jump")]
         public float JumpHeight = 1.2f;
+        
+        [Tooltip("The height of jumps after the first jump. Set to 1 for the same height.")]
+        [Range(0.1f, 5f)]
+        public float AirJumpHeightMultiplier = 0.6f;
 
         [Tooltip("The character uses its own gravity value. The engine default is -9.81f")]
         public float Gravity = -15.0f;
@@ -90,7 +100,9 @@ namespace StarterAssets
         // timeout deltatime
         private float _jumpTimeoutDelta;
         private float _fallTimeoutDelta;
-
+        
+        public int _remainingJumps;
+        
         // animation IDs
         private int _animIDSpeed;
         private int _animIDGrounded;
@@ -188,6 +200,11 @@ namespace StarterAssets
             {
                 _animator.SetBool(_animIDGrounded, Grounded);
             }
+
+            if (Grounded && _verticalVelocity <= 0.0f)
+            {
+                _remainingJumps = MaxJumps;
+            }
         }
 
         private void CameraRotation()
@@ -213,8 +230,16 @@ namespace StarterAssets
 
         private void Move()
         {
-            // set target speed based on move speed, sprint speed and if sprint is pressed
-            float targetSpeed = _input.sprint ? SprintSpeed : MoveSpeed;
+            // set target speed based on move speed...
+            float targetSpeed = MoveSpeed;
+            // ... or set it to something else if sprint or walk are pressed
+            if (_input.sprint)
+            {
+                targetSpeed = SprintSpeed;
+            }
+            else if (_input.walk) {
+                targetSpeed = WalkSpeed;
+            }
 
             // a simplistic acceleration and deceleration designed to be easy to remove, replace, or iterate upon
 
@@ -298,31 +323,9 @@ namespace StarterAssets
                 {
                     _verticalVelocity = -2f;
                 }
-
-                // Jump
-                if (_input.jump && _jumpTimeoutDelta <= 0.0f)
-                {
-                    // the square root of H * -2 * G = how much velocity needed to reach desired height
-                    _verticalVelocity = Mathf.Sqrt(JumpHeight * -2f * Gravity);
-
-                    // update animator if using character
-                    if (_hasAnimator)
-                    {
-                        _animator.SetBool(_animIDJump, true);
-                    }
-                }
-
-                // jump timeout
-                if (_jumpTimeoutDelta >= 0.0f)
-                {
-                    _jumpTimeoutDelta -= Time.deltaTime;
-                }
             }
             else
             {
-                // reset the jump timeout timer
-                _jumpTimeoutDelta = JumpTimeout;
-
                 // fall timeout
                 if (_fallTimeoutDelta >= 0.0f)
                 {
@@ -336,16 +339,44 @@ namespace StarterAssets
                         _animator.SetBool(_animIDFreeFall, true);
                     }
                 }
+            }
+            
+            // Jump
+            if (_input.jump && _remainingJumps > 0 && (!Grounded || _jumpTimeoutDelta <= 0.0f))
+            {
+                float jumpHeight = JumpHeight;
 
-                // if we are not grounded, do not jump
-                _input.jump = false;
+                // Make jumps after the first one weaker
+                if (_remainingJumps < MaxJumps)
+                {
+                    jumpHeight *= AirJumpHeightMultiplier;
+                }
+
+                // the square root of H * -2 * G = how much velocity needed to reach desired height
+                _verticalVelocity = Mathf.Sqrt(jumpHeight * -2f * Gravity);
+
+                // update animator if using character
+                if (_hasAnimator)
+                {
+                    _animator.SetBool(_animIDJump, true);
+                }
+
+                _remainingJumps--;
             }
 
+            // jump timeout
+            if (_jumpTimeoutDelta >= 0.0f)
+            {
+                _jumpTimeoutDelta -= Time.deltaTime;
+            }
+            
             // apply gravity over time if above terminal (multiply by delta time twice to linearly speed up over time)
             if (_verticalVelocity > _terminalVelocity)
             {
                 _verticalVelocity += Gravity * Time.deltaTime;
             }
+            
+            _input.jump = false;
         }
 
         private static float ClampAngle(float lfAngle, float lfMin, float lfMax)
