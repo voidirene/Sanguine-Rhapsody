@@ -43,7 +43,7 @@ namespace StarterAssets
         public float JumpHeight = 1.2f;
         
         [Tooltip("The height of jumps after the first jump. Set to 1 for the same height.")]
-        [Range(0.1f, 1f)]
+        [Range(0.1f, 5f)]
         public float AirJumpHeightMultiplier = 0.6f;
 
         [Tooltip("The character uses its own gravity value. The engine default is -9.81f")]
