@@ -11,6 +11,7 @@ namespace StarterAssets
 		public Vector2 move;
 		public Vector2 look;
 		public bool jump;
+		public bool walk;
 		public bool sprint;
 
 		[Header("Movement Settings")]
@@ -40,6 +41,11 @@ namespace StarterAssets
 		{
 			JumpInput(value.isPressed);
 		}
+		
+		public void OnWalk(InputValue value)
+		{
+			WalkInput(value.isPressed);
+		}
 
 		public void OnSprint(InputValue value)
 		{
@@ -63,6 +69,11 @@ namespace StarterAssets
 			jump = newJumpState;
 		}
 
+		public void WalkInput(bool newWalkState)
+		{
+			walk = newWalkState;
+		}
+		
 		public void SprintInput(bool newSprintState)
 		{
 			sprint = newSprintState;

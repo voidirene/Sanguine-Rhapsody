@@ -16,8 +16,11 @@ namespace StarterAssets
     {
         [Header("Player")]
         [Tooltip("Move speed of the character in m/s")]
-        public float MoveSpeed = 2.0f;
+        public float MoveSpeed = 3.5f;
 
+        [Tooltip("Walk speed of the character in m/s")]
+        public float WalkSpeed = 2.0f;
+        
         [Tooltip("Sprint speed of the character in m/s")]
         public float SprintSpeed = 5.335f;
 
@@ -213,8 +216,16 @@ namespace StarterAssets
 
         private void Move()
         {
-            // set target speed based on move speed, sprint speed and if sprint is pressed
-            float targetSpeed = _input.sprint ? SprintSpeed : MoveSpeed;
+            // set target speed based on move speed...
+            float targetSpeed = MoveSpeed;
+            // ... or set it to something else if sprint or walk are pressed
+            if (_input.sprint)
+            {
+                targetSpeed = SprintSpeed;
+            }
+            else if (_input.walk) {
+                targetSpeed = WalkSpeed;
+            }
 
             // a simplistic acceleration and deceleration designed to be easy to remove, replace, or iterate upon
 
