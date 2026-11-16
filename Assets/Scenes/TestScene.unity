@@ -1361,6 +1361,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::WeaponController
   canAttack: 1
+  bufferDuration: 0.2
+  rootAttack: {fileID: 11400000, guid: ee3d54fa78cc8284a9da7c166a1578e9, type: 2}
+  returnToLocomotionBlend: 0.15
 --- !u!1 &1196417241
 GameObject:
   m_ObjectHideFlags: 0

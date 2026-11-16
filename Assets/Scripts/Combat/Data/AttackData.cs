@@ -1,0 +1,80 @@
+using System;
+using System.Collections.Generic;
+using System.Linq.Expressions;
+using Unity.VisualScripting;
+using UnityEditor.Animations;
+using UnityEngine;
+
+[CreateAssetMenu(fileName = "AttackData", menuName = "Scriptable Objects/AttackData")]
+public class AttackData : ScriptableObject
+{
+    [Header("Animation Settings")]
+    public AnimationClip clip; // The attack's animation clip
+    public string stateName; // Which Animator state to play
+    public int StateHash { get; private set; }
+    [Tooltip("Tick if the Animator state is named differently from the clip on purpose")]
+    public bool allowStateNameMismatch;
+    [DoNotSerialize][Min(0f)] public float Duration => clip != null ? clip.length : 0f;
+    
+    [Space(10)]
+    [Header("Transition Settings")]
+    public float crossFadeTime = 0.1f; // Per-attack blending; Heavy attacks often want longer crossfades
+    [Range(0f, 1f)]
+    public float cancelWindowStart = 0.5f; // From here on, the player may chain into the next attack
+    [Range(0f, 1f)]
+    public float exitTime = 0.9f; // When the attack is considered finished, and you can return to 
+    
+    [Space(10)]
+    [Header("Damage & Follow-up Attacks")]
+    [Min(0f)] public float damageMultiplier = 1; // Scales the weapon’s base damage
+    public List<ComboTransition> transitions; // List of follow-up attacks
+
+    void OnEnable()
+    {
+        RefreshHash();
+    }
+
+#if UNITY_EDITOR
+    private void OnValidate()
+    {
+        crossFadeTime = Mathf.Max(0f, crossFadeTime);
+        damageMultiplier = Mathf.Max(0f, damageMultiplier);
+        
+        // Just in case these two are changed through code and not the inspector
+        cancelWindowStart = Mathf.Clamp01(cancelWindowStart);
+        exitTime = Mathf.Clamp01(exitTime);
+
+        // The attack can't end before its cancel window opens.
+        // Raising cancelWindowStart past exitTime pushes exitTime up with it.
+        exitTime = Mathf.Max(exitTime, cancelWindowStart);
+        
+        // OPTIONAL: default the state name to the clip's name
+        if (clip != null && string.IsNullOrEmpty(stateName))
+            stateName = clip.name;
+
+        if (clip != null && !allowStateNameMismatch && stateName != clip.name)
+            Debug.LogWarning($"{name}: stateName '{stateName}' doesn't match clip '{clip.name}'. " +
+                             "Fix it, or tick Allow State Name Mismatch if that's intended.", this);
+
+        if (clip == null && !string.IsNullOrEmpty(stateName))
+            Debug.LogWarning($"{name}: has a state name but no clip, so the controller " +
+                             "has no clip.length to compute progress from.", this);
+        
+        RefreshHash();
+    }
+#endif
+    
+    void RefreshHash()
+    {
+        StateHash = string.IsNullOrEmpty(stateName) ? 0 : Animator.StringToHash(stateName);
+    }
+}
+
+[Serializable]
+public class ComboTransition
+{
+    public AttackInput input;
+    public AttackData next;
+    public int priority;
+    // public CombatCondition[] conditions;
+}
