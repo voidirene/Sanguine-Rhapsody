@@ -42,6 +42,8 @@ namespace Gamekit3D
         protected Vector3[] m_PreviousPos = null;
         protected Vector3 m_Direction;
 
+        protected float m_DamageMultiplier = 1f;
+        
         protected bool m_IsThrowingHit = false;
         protected bool m_InAttack = false;
 
@@ -75,7 +77,7 @@ namespace Gamekit3D
             m_Owner = owner;
         }
 
-        public void BeginAttack(bool throwingAttack)
+        public void BeginAttack(bool throwingAttack, float damagemultiplier = 1)
         {
             if (attackAudio != null)
                 attackAudio.PlayRandomClip();
@@ -133,7 +135,7 @@ namespace Gamekit3D
                     Ray r = new Ray(worldPos, attackVector.normalized);
 
                     int contacts = Physics.SphereCastNonAlloc(r, pts.radius, s_RaycastHitCache, attackVector.magnitude,
-                        ~0,
+                        targetLayers,
                         QueryTriggerInteraction.Ignore);
 
                     for (int k = 0; k < contacts; ++k)
@@ -180,10 +182,19 @@ namespace Gamekit3D
                 else
                     hitAudio.PlayRandomClip ();
             }
+            
+            // Falls back to the owner's forward if they're stacked on top of each other.
+            Vector3 ownerPos = m_Owner != null ? m_Owner.transform.position : transform.position;
+            Vector3 toTarget = d.transform.position - ownerPos;
+            toTarget.y = 0f;
+            if (toTarget.sqrMagnitude > 0.0001f)
+                m_Direction = toTarget.normalized;
+            else
+                m_Direction = m_Owner != null ? m_Owner.transform.forward : transform.forward;
 
             Damageable.DamageMessage data;
 
-            data.amount = damage;
+            data.amount = Mathf.RoundToInt(damage * m_DamageMultiplier);
             data.damager = this;
             data.direction = m_Direction.normalized;
             data.damageSource = m_Owner.transform.position;

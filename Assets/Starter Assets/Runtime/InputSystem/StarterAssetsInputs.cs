@@ -13,8 +13,13 @@ namespace StarterAssets
 		public bool jump;
 		public bool walk;
 		public bool sprint;
+		public bool dodge;
+		[SerializeField] float tapWindow = 0.2f;
+		float _pressTime;
+		bool _pressed;
 		public bool lightAttack;
 		public bool heavyAttack;
+		public bool block;
 
 		[Header("Movement Settings")]
 		public bool analogMovement;
@@ -49,9 +54,24 @@ namespace StarterAssets
 			WalkInput(value.isPressed);
 		}
 
+		void Update()
+		{
+			if (_pressed && !sprint && Time.time - _pressTime >= tapWindow)
+				sprint = true;
+		}
+		
 		public void OnSprint(InputValue value)
 		{
-			SprintInput(value.isPressed);
+			if (value.isPressed)
+			{
+				_pressed = true;
+				_pressTime = Time.time;
+				return;
+			}
+			if (_pressed && !sprint)
+				dodge = true;
+			_pressed = false;
+			sprint = false;
 		}
 
 		public void OnLightAttack(InputValue value)
@@ -62,6 +82,11 @@ namespace StarterAssets
 		public void OnHeavyAttack(InputValue value)
 		{
 			HeavyAttackInput(value.isPressed);
+		}
+		
+		public void OnBlock(InputValue value)
+		{
+			BlockInput(value.isPressed);
 		}
 		
 #endif
@@ -100,6 +125,11 @@ namespace StarterAssets
 		public void HeavyAttackInput(bool newHeavyAttackState)
 		{
 			heavyAttack = newHeavyAttackState;
+		}
+		
+		public void BlockInput(bool newBlockState)
+		{
+			block = newBlockState;
 		}
 		
 		private void OnApplicationFocus(bool hasFocus)
