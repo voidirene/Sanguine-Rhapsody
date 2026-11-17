@@ -2,5 +2,6 @@ public enum AttackInput
 {
     None,
     Light,
-    Heavy
+    Heavy,
+    Block
 }

@@ -15,6 +15,7 @@ namespace StarterAssets
 		public bool sprint;
 		public bool lightAttack;
 		public bool heavyAttack;
+		public bool block;
 
 		[Header("Movement Settings")]
 		public bool analogMovement;
@@ -64,6 +65,11 @@ namespace StarterAssets
 			HeavyAttackInput(value.isPressed);
 		}
 		
+		public void OnBlock(InputValue value)
+		{
+			BlockInput(value.isPressed);
+		}
+		
 #endif
 
 
@@ -100,6 +106,11 @@ namespace StarterAssets
 		public void HeavyAttackInput(bool newHeavyAttackState)
 		{
 			heavyAttack = newHeavyAttackState;
+		}
+		
+		public void BlockInput(bool newBlockState)
+		{
+			block = newBlockState;
 		}
 		
 		private void OnApplicationFocus(bool hasFocus)

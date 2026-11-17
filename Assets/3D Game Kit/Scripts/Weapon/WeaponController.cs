@@ -24,6 +24,7 @@ public class WeaponController : MonoBehaviour
     private float _elapsed; // seconds since _currentAttack started
     private bool IsIdle => _currentAttack == rootAttack;
     
+    private ThirdPersonController _controller;   
     private MeleeWeapon _meleeWeapon;
     private RangeWeapon _rangeWeapon;
     private StarterAssetsInputs _input;
@@ -36,6 +37,7 @@ public class WeaponController : MonoBehaviour
         _input = GetComponent<StarterAssetsInputs>();
         _animator = GetComponent<Animator>();
         
+        _controller = GetComponent<ThirdPersonController>();
         _meleeWeapon = GetComponentInChildren<MeleeWeapon>();
         _rangeWeapon = GetComponentInChildren<RangeWeapon>();
         if (!_meleeWeapon && !_rangeWeapon)
@@ -71,9 +73,10 @@ public class WeaponController : MonoBehaviour
 
         // Heavy is checked second, so if both land on the same frame, heavy wins
         // Ask Kenneth: do we want priorities like this?
+        if (_input.block)
+            BufferInput(AttackInput.Block);
         if (_input.lightAttack)
             BufferInput(AttackInput.Light);
-
         if (_input.heavyAttack)
             BufferInput(AttackInput.Heavy);
     }
@@ -152,21 +155,28 @@ public class WeaponController : MonoBehaviour
         AttackInput input = PeekBuffer();
         if (input == AttackInput.None)
             return;
-
-        AttackData next = FindNext(_currentAttack, input);
-        if (next != null)
-            StartAttack(next);
+        
+        AttackConditions conditions = SetConditions(); // should we call this separately on Update()? No need right?
+        ComboTransition transition = FindNext(_currentAttack, input, conditions);
+        if (transition != null)
+            StartAttack(transition.nextAttack);
     }
 
-    // WIP: get the first transition with a matching input
-    private AttackData FindNext(AttackData from, AttackInput input)
+    private ComboTransition FindNext(AttackData currentAttack, AttackInput input, in AttackConditions conditions)
     {
-        foreach (var t in from.transitions)
+        ComboTransition bestMatch = null;
+        
+        foreach (var t in currentAttack.transitions)
         {
-            if (t.input == input)
-                return t.next;
+            if (t.input != input) continue;
+            if (t.nextAttack == null) continue;
+            if (!t.ConditionsMet(conditions)) continue;
+
+            if (bestMatch == null || t.priority > bestMatch.priority) // for the first matching item, save it, and for the next ones save them only if their priority is higher
+                bestMatch = t;
         }
-        return null;
+        
+        return bestMatch;
     }
 
     
@@ -197,6 +207,7 @@ public class WeaponController : MonoBehaviour
         _animator.CrossFadeInFixedTime(HashLocomotion, returnToLocomotionBlend);
     }
 
+    // Aborting may happen because of the character getting hurt, dying, a cutscene, etc
     private void AbortCombo()
     {
         if (_meleeWeapon) _meleeWeapon.EndAttack();
@@ -206,7 +217,29 @@ public class WeaponController : MonoBehaviour
         ConsumeBuffer();
     }
     #endregion
-    
+
+    #region Conditions
+
+    private AttackConditions SetConditions()
+    {
+        // Movement
+        Vector2 moveInput = _input.move;
+        // Holding attack input
+        bool holdingAttackInput = _input.lightAttack || _input.heavyAttack; // WIP: this might not be too robust, test it a lot
+        // Pause between attacks (0 when idle or when still mid-attack)
+        float windowOpensAt = _currentAttack.cancelWindowStart * _currentAttack.Duration;
+        float timeInCancelWindow = IsIdle ? 0f : Mathf.Max(0f, _elapsed - windowOpensAt);
+        // Airborne/Jumping
+        bool isGrounded = _controller.Grounded;
+        // Dodge
+        bool justDodged = _input.sprint; // WIP: this currently just checks if we're sprinting. sprint and dodge are the same button, but dodge is a tap while sprint is a hold. implement dodge functionality
+        // Blocking
+        bool isBlocking = _input.block;
+
+        return new AttackConditions(moveInput, holdingAttackInput, timeInCancelWindow, isGrounded, justDodged, isBlocking);
+    }
+
+    #endregion
     
     // ---------- Animation events ----------
     public void OnMeleeAttackStart()

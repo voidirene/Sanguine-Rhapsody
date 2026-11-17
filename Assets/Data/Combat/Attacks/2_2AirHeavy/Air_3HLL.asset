@@ -1,0 +1,34 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0f3a8010ffb606c4d96bed2b7bc0f61b, type: 3}
+  m_Name: Air_3HLL
+  m_EditorClassIdentifier: Assembly-CSharp::AttackData
+  clip: {fileID: 7400000, guid: 7dbd5cbd4a21e704eb6842ce2394b8d4, type: 2}
+  stateName: Air_3HLL
+  allowStateNameMismatch: 1
+  crossFadeTime: 0.1
+  cancelWindowStart: 0.5
+  exitTime: 0.9
+  damageMultiplier: 2
+  transitions:
+  - input: 2
+    nextAttack: {fileID: 11400000, guid: 066721f181436f44a90845b5f844c11e, type: 2}
+    priority: 0
+    movingForward: 0
+    movingBackward: 0
+    movingLeft: 0
+    movingRight: 0
+    holdingAttackInput: 0
+    minTimeInCancelWindow: 0
+    air: 2
+    dodged: 0
+    blocking: 0

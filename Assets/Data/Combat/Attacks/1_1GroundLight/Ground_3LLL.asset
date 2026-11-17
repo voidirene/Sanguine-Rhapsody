@@ -1,0 +1,58 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0f3a8010ffb606c4d96bed2b7bc0f61b, type: 3}
+  m_Name: Ground_3LLL
+  m_EditorClassIdentifier: Assembly-CSharp::AttackData
+  clip: {fileID: 7400000, guid: 17fb89e3c6bcb834b92234e8b07103fe, type: 2}
+  stateName: Ground_3LLL
+  allowStateNameMismatch: 1
+  crossFadeTime: 0.1
+  cancelWindowStart: 0.5
+  exitTime: 0.9
+  damageMultiplier: 1.5
+  transitions:
+  - input: 1
+    nextAttack: {fileID: 11400000, guid: a6b8948418061c8409ace9696167ee27, type: 2}
+    priority: 0
+    movingForward: 0
+    movingBackward: 0
+    movingLeft: 0
+    movingRight: 0
+    holdingAttackInput: 0
+    minTimeInCancelWindow: 0
+    air: 1
+    dodged: 0
+    blocking: 0
+  - input: 2
+    nextAttack: {fileID: 11400000, guid: 80abb618a98767c478bc8942f589178c, type: 2}
+    priority: 0
+    movingForward: 0
+    movingBackward: 0
+    movingLeft: 0
+    movingRight: 0
+    holdingAttackInput: 0
+    minTimeInCancelWindow: 0
+    air: 1
+    dodged: 0
+    blocking: 0
+  - input: 2
+    nextAttack: {fileID: 11400000, guid: b108f422bbd74c144b6395bf63985b65, type: 2}
+    priority: 10
+    movingForward: 0
+    movingBackward: 0
+    movingLeft: 0
+    movingRight: 0
+    holdingAttackInput: 0
+    minTimeInCancelWindow: 2
+    air: 1
+    dodged: 0
+    blocking: 0

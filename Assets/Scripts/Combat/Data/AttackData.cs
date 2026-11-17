@@ -20,7 +20,7 @@ public class AttackData : ScriptableObject
     [Header("Transition Settings")]
     public float crossFadeTime = 0.1f; // Per-attack blending; Heavy attacks often want longer crossfades
     [Range(0f, 1f)]
-    public float cancelWindowStart = 0.5f; // From here on, the player may chain into the next attack
+    public float cancelWindowStart = 0.5f; // From here on, the player may chain into the nextAttack attack
     [Range(0f, 1f)]
     public float exitTime = 0.9f; // When the attack is considered finished, and you can return to 
     
@@ -74,7 +74,45 @@ public class AttackData : ScriptableObject
 public class ComboTransition
 {
     public AttackInput input;
-    public AttackData next;
+    public AttackData nextAttack;
+    [Tooltip("In the case of multiple transitions having their requirements fulfilled, the one with the highest priority will be executed.")]
     public int priority;
-    // public CombatCondition[] conditions;
+    
+    // Refers to certain extra inputs that change which combo is performed
+    [Header("Transition Requirements")]
+    public bool movingForward;
+    public bool movingBackward;
+    public bool movingLeft;
+    public bool movingRight;
+    public bool holdingAttackInput;
+    [Min(0f)] public float minTimeInCancelWindow;   // in seconds
+    public AirRequirement air = AirRequirement.Any;
+    public bool dodged;
+    public bool blocking;
+    
+    
+    public bool ConditionsMet(in AttackConditions conditions)
+    {
+        // Go through all conditions, and if one isnt met return false, otherwise return true
+        // Movement
+        if (movingForward && conditions.MoveInput.y <= 0.5f) return false;
+        if (movingBackward && conditions.MoveInput.y >= -0.5f) return false;
+        if (movingLeft && conditions.MoveInput.x >= -0.5f) return false;
+        if (movingRight && conditions.MoveInput.x <= 0.5f) return false;
+        // Holding attack input
+        if (holdingAttackInput && !conditions.HoldingAttackInput) return false;
+        // Pause between attacks
+        if (minTimeInCancelWindow > conditions.TimeInCancelWindow) return false;
+        // Airborne/Jumping
+        if (air == AirRequirement.Grounded && !conditions.IsGrounded) return false;
+        if (air == AirRequirement.Airborne && conditions.IsGrounded) return false;
+        // Dodge
+        if (dodged && !conditions.JustDodged) return false;
+        // Blocking
+        if (blocking && !conditions.IsBlocking) return false;
+        
+        return true;
+    }
 }
+
+public enum AirRequirement { Any, Grounded, Airborne }
