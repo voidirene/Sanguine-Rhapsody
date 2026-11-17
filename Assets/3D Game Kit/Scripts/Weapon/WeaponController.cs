@@ -75,6 +75,8 @@ public class WeaponController : MonoBehaviour
         // Ask Kenneth: do we want priorities like this?
         if (_input.block)
             BufferInput(AttackInput.Block);
+        if (_input.dodge)
+            BufferInput(AttackInput.Dodge);
         if (_input.lightAttack)
             BufferInput(AttackInput.Light);
         if (_input.heavyAttack)
@@ -255,5 +257,6 @@ public class WeaponController : MonoBehaviour
     {
         _input.lightAttack = false;
         _input.heavyAttack = false;
+        _input.dodge = false;
     }
 }

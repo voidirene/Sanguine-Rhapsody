@@ -3,5 +3,6 @@ public enum AttackInput
     None,
     Light,
     Heavy,
-    Block
+    Block,
+    Dodge
 }
