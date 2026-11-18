@@ -24,20 +24,24 @@ public class WeaponController : MonoBehaviour
     private float _elapsed; // seconds since _currentAttack started
     private bool IsIdle => _currentAttack == rootAttack;
     
-    private ThirdPersonController _controller;   
+    private ThirdPersonController _controller;
+    private StarterAssetsInputs _input;
+    private PlayerLock _lock;
     private MeleeWeapon _meleeWeapon;
     private RangeWeapon _rangeWeapon;
-    private StarterAssetsInputs _input;
+    private TransformationController _transformation;
     private Animator _animator;
     
     private static readonly int HashLocomotion = Animator.StringToHash("Idle Walk Run Blend");
 
     private void Awake()
     {
+        _controller = GetComponent<ThirdPersonController>();
         _input = GetComponent<StarterAssetsInputs>();
+        _lock = GetComponent<PlayerLock>();
         _animator = GetComponent<Animator>();
         
-        _controller = GetComponent<ThirdPersonController>();
+        _transformation = GetComponentInChildren<TransformationController>();
         _meleeWeapon = GetComponentInChildren<MeleeWeapon>();
         _rangeWeapon = GetComponentInChildren<RangeWeapon>();
         if (!_meleeWeapon && !_rangeWeapon)
@@ -59,9 +63,13 @@ public class WeaponController : MonoBehaviour
 
     private void Update()
     {
-        CaptureInput();
-        ExpireBuffer();
-        TickCombo();
+        if (!_lock.IsLocked(LockFlags.Actions))
+        {
+            CaptureInput();
+            ExpireBuffer();
+            TickCombo();
+        }
+        
         ResetCombatInputs();
     }
 
@@ -237,8 +245,10 @@ public class WeaponController : MonoBehaviour
         bool justDodged = _input.sprint; // WIP: this currently just checks if we're sprinting. sprint and dodge are the same button, but dodge is a tap while sprint is a hold. implement dodge functionality
         // Blocking
         bool isBlocking = _input.block;
+        // Transformation
+        bool isTransformed = _transformation.currentForm == TransformationController.CharacterForm.Transformed;
 
-        return new AttackConditions(moveInput, holdingAttackInput, timeInCancelWindow, isGrounded, justDodged, isBlocking);
+        return new AttackConditions(moveInput, holdingAttackInput, timeInCancelWindow, isGrounded, justDodged, isBlocking, isTransformed);
     }
 
     #endregion

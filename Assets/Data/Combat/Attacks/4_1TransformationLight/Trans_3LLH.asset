@@ -22,7 +22,7 @@ MonoBehaviour:
   transitions:
   - input: 2
     nextAttack: {fileID: 11400000, guid: a5c4ec1916de93a488980883da574496, type: 2}
-    priority: 0
+    priority: 100
     movingForward: 0
     movingBackward: 0
     movingLeft: 0
@@ -32,3 +32,4 @@ MonoBehaviour:
     air: 1
     dodged: 0
     blocking: 0
+    transformation: 1
