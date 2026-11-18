@@ -14,6 +14,8 @@ namespace StarterAssets
 		public bool walk;
 		public bool sprint;
 		public bool dodge;
+		public bool transformation;
+		public bool drawArcana;
 		[SerializeField] float tapWindow = 0.2f;
 		float _pressTime;
 		bool _pressed;
@@ -88,6 +90,16 @@ namespace StarterAssets
 		{
 			BlockInput(value.isPressed);
 		}
+
+		public void OnTransformation(InputValue value)
+		{
+			TransformationInput(value.isPressed);
+		}
+
+		public void OnDrawArcana(InputValue value)
+		{
+			DrawArcanaInput(value.isPressed);
+		}
 		
 #endif
 
@@ -130,6 +142,16 @@ namespace StarterAssets
 		public void BlockInput(bool newBlockState)
 		{
 			block = newBlockState;
+		}
+
+		public void TransformationInput(bool newTransformationState)
+		{
+			transformation = newTransformationState;
+		}
+
+		public void DrawArcanaInput(bool newDrawArcanaState)
+		{
+			drawArcana = newDrawArcanaState;
 		}
 		
 		private void OnApplicationFocus(bool hasFocus)

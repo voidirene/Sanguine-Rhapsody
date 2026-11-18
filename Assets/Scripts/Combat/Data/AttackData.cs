@@ -89,6 +89,7 @@ public class ComboTransition
     public AirRequirement air = AirRequirement.Any;
     public bool dodged;
     public bool blocking;
+    public bool transformation;
     
     
     public bool ConditionsMet(in AttackConditions conditions)
@@ -110,6 +111,7 @@ public class ComboTransition
         if (dodged && !conditions.JustDodged) return false;
         // Blocking
         if (blocking && !conditions.IsBlocking) return false;
+        if (transformation && !conditions.IsTransformed) return false;
         
         return true;
     }

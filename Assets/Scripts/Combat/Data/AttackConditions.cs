@@ -13,8 +13,9 @@ public readonly struct AttackConditions
     public readonly bool IsGrounded;
     public readonly bool JustDodged;
     public readonly bool IsBlocking;
+    public readonly bool IsTransformed;
     
-    public AttackConditions(Vector2 moveInput, bool holdingAttackInput, float timeInCancelWindow, bool isGrounded, bool justDodged, bool isBlocking)
+    public AttackConditions(Vector2 moveInput, bool holdingAttackInput, float timeInCancelWindow, bool isGrounded, bool justDodged, bool isBlocking, bool isTransformed)
     {
         this.MoveInput = moveInput;
         this.HoldingAttackInput = holdingAttackInput;
@@ -22,5 +23,6 @@ public readonly struct AttackConditions
         this.IsGrounded = isGrounded;
         this.JustDodged = justDodged;
         this.IsBlocking = isBlocking;
+        this.IsTransformed = isTransformed;
     }
 }
