@@ -63,6 +63,8 @@ public class TransformationController : MonoBehaviour
     private void TryTransformation()
     {
         // Can't tranform if...
+        if (_lock.IsLocked(LockFlags.Actions)) // ...we're locked from doing actions
+            return;
         if (!_ecstasyMeter.IsAtThreshold) // ...the ecstasy meter hasn't reached the threshold
             return;
         if (currentForm != CharacterForm.Normal) // ...the character isn't in their normal form

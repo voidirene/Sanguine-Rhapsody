@@ -1018,7 +1018,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EcstasyMeterSettings
   maxValue: 100
-  passiveFillPerSecond: 15
+  passiveFillPerSecond: 30
   drainPerSecond: 6
   baseGainPerHit: 2
   transformThreshold: 70
@@ -1415,6 +1415,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 3893294197879345259, guid: 64dce48905ffd9b4293e595fa6941544, type: 3}
       insertIndex: -1
       addedObject: {fileID: 726764828}
+    - targetCorrespondingSourceObject: {fileID: 3893294197879345259, guid: 64dce48905ffd9b4293e595fa6941544, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1881403599}
     - targetCorrespondingSourceObject: {fileID: 3893294197879345259, guid: 64dce48905ffd9b4293e595fa6941544, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1739838640}
@@ -2513,6 +2516,74 @@ MonoBehaviour:
   OnResetDamage:
     m_PersistentCalls:
       m_Calls: []
+--- !u!1 &1881403598
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1881403599}
+  - component: {fileID: 1881403601}
+  - component: {fileID: 1881403600}
+  m_Layer: 8
+  m_Name: Arcana
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1881403599
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1881403598}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1191882769}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1881403600
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1881403598}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4c8a2323280cc28408981bddc87732f9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ArcanaController
+  characterArcana: {fileID: 11400000, guid: 38a66485220deff43bb2555e6a7915b1, type: 2}
+  drawnArcana: {fileID: 0}
+  stashedArcana: {fileID: 0}
+  pairedArcana: {fileID: 0}
+  ArcanaInPool:
+  - {fileID: 11400000, guid: 2d3c6d8a17fa84140b4b728c39457dd2, type: 2}
+  - {fileID: 11400000, guid: 6c32d5ced42c02b42afffbfd66833b5e, type: 2}
+  - {fileID: 11400000, guid: f6aae6ffc341e9d4c8bf37cce37852b4, type: 2}
+  - {fileID: 11400000, guid: c45ece08019a1324297715b2b75d50af, type: 2}
+  - {fileID: 11400000, guid: 3bb764980d0fcb044a4c1aceee2d57d8, type: 2}
+  ArcanaDiscardPile: []
+--- !u!114 &1881403601
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1881403598}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cac656e59df25bd49bb6236cf34bfd97, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ArcanaHand
 --- !u!1001 &1955044389
 PrefabInstance:
   m_ObjectHideFlags: 0
