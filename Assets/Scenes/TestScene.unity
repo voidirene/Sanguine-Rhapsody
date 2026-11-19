@@ -2572,6 +2572,12 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 3bb764980d0fcb044a4c1aceee2d57d8, type: 2}
   ArcanaDiscardPile: []
   redrawCooldown: 2
+  allPairs:
+  - {fileID: 11400000, guid: b5e4ef1a9ea099c459bc2b4d7b4ef25a, type: 2}
+  - {fileID: 11400000, guid: 0c46ffbfcbbbc2945aee68a08fe0beed, type: 2}
+  - {fileID: 11400000, guid: 54e4dfa8cad4035459dfb6e43a08ccfc, type: 2}
+  - {fileID: 11400000, guid: 7f7a90d2a25de7045bd77e306a11202d, type: 2}
+  - {fileID: 11400000, guid: 51ecdf075f1428347bb705671465ca71, type: 2}
 --- !u!1001 &1955044389
 PrefabInstance:
   m_ObjectHideFlags: 0

@@ -28,6 +28,11 @@ public class ArcanaController : MonoBehaviour
     [Tooltip("How long it takes to redraw arcana after discarding")]
     [SerializeField] private float redrawCooldown = 2f;
     
+    [Space(10)]
+    [Header("Pairs")]
+    [SerializeField] private List<ArcanaPairData> allPairs = new List<ArcanaPairData>();
+    public ArcanaPairData ActivePair { get; private set; }
+    
     // Transformation variables
     private bool IsTransformed => _transformation.currentForm == TransformationController.CharacterForm.Transformed;
     private bool _wasTransformed;
@@ -42,6 +47,7 @@ public class ArcanaController : MonoBehaviour
     
     private StarterAssetsInputs _input;
     private TransformationController _transformation;
+    private ArcanaPairLibrary _pairLibrary;
     
     
     void Awake()
@@ -49,11 +55,15 @@ public class ArcanaController : MonoBehaviour
         _input = GetComponentInParent<StarterAssetsInputs>();
         _transformation = transform.parent.GetComponentInChildren<TransformationController>();
 
+        // Build the Pair Library
+        _pairLibrary = new ArcanaPairLibrary(allPairs);
+        
         if (ArcanaInPool.Count == 0)
         {
             Debug.LogWarning("Character doesn't have any Secondary Arcana In Pool!!");
             return;
         }
+        _pairLibrary.Validate(characterArcana, ArcanaInPool);
         ShuffleArcanaPool(ArcanaInPool);
     }
 
@@ -111,13 +121,23 @@ public class ArcanaController : MonoBehaviour
         State = ArcanaState.Presenting;
     }
 
+    // WIP: Ask Kenneth if we want the played Arcana to have a duration time, or if it just lasts indefinitely until replaced
     void PlayArcana()
     {
         if (State != ArcanaState.Presenting)
             return;
- 
+
+        // Check our pair
+        ArcanaPairData pair = _pairLibrary.GetPair(characterArcana, drawnArcana);
+        if (pair == null)
+        {
+            Debug.LogError($"CAN'T PLAY CARD. No pair found for {drawnArcana.name}");
+            return;
+        }
+        
         pairedArcana = drawnArcana;
         drawnArcana = null;
+        ActivePair = pair;
  
         State = ArcanaState.Paired;
     }
@@ -202,6 +222,7 @@ public class ArcanaController : MonoBehaviour
         drawnArcana = null;
         stashedArcana = null;
         pairedArcana = null;
+        ActivePair = null;
         
         // Add the (now full) discard pile back to the pool
         RecycleDiscardPile();
