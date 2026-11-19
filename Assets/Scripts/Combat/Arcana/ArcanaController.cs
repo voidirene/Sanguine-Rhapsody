@@ -23,8 +23,22 @@ public class ArcanaController : MonoBehaviour
     public List<ArcanaData> ArcanaInPool = new List<ArcanaData>();
     public List<ArcanaData> ArcanaDiscardPile = new List<ArcanaData>();
     
+    [Space(10)]
+    [Header("Redraw Cooldown")]
+    [Tooltip("How long it takes to redraw arcana after discarding")]
+    [SerializeField] private float redrawCooldown = 2f;
+    
+    // Transformation variables
     private bool IsTransformed => _transformation.currentForm == TransformationController.CharacterForm.Transformed;
     private bool _wasTransformed;
+    
+    // Redraw cooldown variables
+    private float _nextDrawAllowedTime;
+    private float _activeCooldownDuration;
+    private static float Now => Time.time;
+    public bool CanDraw => Now >= _nextDrawAllowedTime;
+    public float CooldownRemaining => Mathf.Max(0f, _nextDrawAllowedTime - Now);
+    
     
     private StarterAssetsInputs _input;
     private TransformationController _transformation;
@@ -77,6 +91,11 @@ public class ArcanaController : MonoBehaviour
     {
         if (State != ArcanaState.Idle)
             return;
+        if (!CanDraw)
+        {
+            Debug.Log($"Redraw on cooldown: {CooldownRemaining:F1}s left");
+            return;
+        }
         
         // Shuffle the discard pile back in if there's nothing left
         if (ArcanaInPool.Count == 0)
@@ -137,10 +156,15 @@ public class ArcanaController : MonoBehaviour
  
         ArcanaDiscardPile.Add(drawnArcana);
         drawnArcana = null;
- 
-        // WIP: Redraw cooldown here
- 
+
+        StartRedrawCooldown();
         State = ArcanaState.Idle;
+    }
+    
+    private void StartRedrawCooldown()
+    {
+        _activeCooldownDuration = redrawCooldown;
+        _nextDrawAllowedTime = Now + _activeCooldownDuration;
     }
     
     private void ShuffleArcanaPool(List<ArcanaData> list)
@@ -182,6 +206,7 @@ public class ArcanaController : MonoBehaviour
         // Add the (now full) discard pile back to the pool
         RecycleDiscardPile();
         
+        _nextDrawAllowedTime = 0f;
         State = ArcanaState.Idle;
     }
     

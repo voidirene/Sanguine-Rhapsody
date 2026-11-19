@@ -2525,7 +2525,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1881403599}
-  - component: {fileID: 1881403601}
   - component: {fileID: 1881403600}
   m_Layer: 8
   m_Name: Arcana
@@ -2572,18 +2571,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: c45ece08019a1324297715b2b75d50af, type: 2}
   - {fileID: 11400000, guid: 3bb764980d0fcb044a4c1aceee2d57d8, type: 2}
   ArcanaDiscardPile: []
---- !u!114 &1881403601
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1881403598}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: cac656e59df25bd49bb6236cf34bfd97, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::ArcanaHand
+  redrawCooldown: 2
 --- !u!1001 &1955044389
 PrefabInstance:
   m_ObjectHideFlags: 0
