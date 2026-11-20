@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using StarterAssets;
 using UnityEngine;
@@ -7,8 +8,7 @@ public class ArcanaController : MonoBehaviour
     public enum ArcanaState
     {
         Idle,
-        Presenting, 
-        Paired
+        Presenting
     }
     public ArcanaState State { get; private set; } = ArcanaState.Idle;
     
@@ -16,7 +16,6 @@ public class ArcanaController : MonoBehaviour
     public ArcanaData characterArcana;
     public ArcanaData drawnArcana;
     public ArcanaData stashedArcana;
-    public ArcanaData pairedArcana;
     
     [Space(10)]
     [Header("Deck")]
@@ -31,7 +30,6 @@ public class ArcanaController : MonoBehaviour
     [Space(10)]
     [Header("Pairs")]
     [SerializeField] private List<ArcanaPairData> allPairs = new List<ArcanaPairData>();
-    public ArcanaPairData ActivePair { get; private set; }
     
     // Transformation variables
     private bool IsTransformed => _transformation.currentForm == TransformationController.CharacterForm.Transformed;
@@ -40,7 +38,7 @@ public class ArcanaController : MonoBehaviour
     // Redraw cooldown variables
     private float _nextDrawAllowedTime;
     private float _activeCooldownDuration;
-    private static float Now => Time.time;
+    private static float Now => Time.time;  // this WILL be modified if we tweak timeScale. if we don't want this, use unscaledTime
     public bool CanDraw => Now >= _nextDrawAllowedTime;
     public float CooldownRemaining => Mathf.Max(0f, _nextDrawAllowedTime - Now);
     
@@ -49,6 +47,8 @@ public class ArcanaController : MonoBehaviour
     private TransformationController _transformation;
     private ArcanaPairLibrary _pairLibrary;
     
+    public event Action<ArcanaPairData> OnPairActivated;
+    public event Action OnArcanaReset;
     
     void Awake()
     {
@@ -117,11 +117,10 @@ public class ArcanaController : MonoBehaviour
         drawnArcana = ArcanaInPool[0];
         ArcanaInPool.RemoveAt(0);
         
-        Debug.Log($"Drew: {drawnArcana.name}");
+        Debug.Log($"Drew: {drawnArcana.title}");
         State = ArcanaState.Presenting;
     }
 
-    // WIP: Ask Kenneth if we want the played Arcana to have a duration time, or if it just lasts indefinitely until replaced
     void PlayArcana()
     {
         if (State != ArcanaState.Presenting)
@@ -131,15 +130,15 @@ public class ArcanaController : MonoBehaviour
         ArcanaPairData pair = _pairLibrary.GetPair(characterArcana, drawnArcana);
         if (pair == null)
         {
-            Debug.LogError($"CAN'T PLAY CARD. No pair found for {drawnArcana.name}");
+            Debug.LogError($"CAN'T PLAY CARD. No pair found for {drawnArcana.title}");
             return;
         }
         
-        pairedArcana = drawnArcana;
+        ArcanaDiscardPile.Add(drawnArcana);
         drawnArcana = null;
-        ActivePair = pair;
  
-        State = ArcanaState.Paired;
+        State = ArcanaState.Idle;
+        OnPairActivated?.Invoke(pair);
     }
 
     void StashArcana()
@@ -216,19 +215,19 @@ public class ArcanaController : MonoBehaviour
     private void ResetArcana()
     {
         // Add the arcanas that may be in circulation into the discard pile
-        foreach (ArcanaData arcana in new[] { drawnArcana, stashedArcana, pairedArcana })
+        foreach (ArcanaData arcana in new[] { drawnArcana, stashedArcana })
             if (arcana != null)
                 ArcanaDiscardPile.Add(arcana);
         drawnArcana = null;
         stashedArcana = null;
-        pairedArcana = null;
-        ActivePair = null;
         
         // Add the (now full) discard pile back to the pool
         RecycleDiscardPile();
         
         _nextDrawAllowedTime = 0f;
         State = ArcanaState.Idle;
+        
+        OnArcanaReset?.Invoke();
     }
     
     private void ResetArcanaInput()

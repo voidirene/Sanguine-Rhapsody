@@ -13,6 +13,6 @@ MonoBehaviour:
   m_Name: 3Chariot
   m_EditorClassIdentifier: Assembly-CSharp::ArcanaData
   id: 3
-  name: The Chariot
+  title: The Chariot
   desc: Arcana test 2
   icon: {fileID: 0}

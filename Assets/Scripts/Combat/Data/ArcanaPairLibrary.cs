@@ -46,7 +46,7 @@ public class ArcanaPairLibrary
             var key = new PairKey(pair.arcanaA, pair.arcanaB);
             if (_lookup.ContainsKey(key))
             {
-                Debug.LogWarning($"Arcana Pair duplicate for {pair.arcanaA.name} + {pair.arcanaB.name}!!");
+                Debug.LogWarning($"Arcana Pair duplicate for {pair.arcanaA.title} + {pair.arcanaB.title}!!");
                 continue;
             }
             
@@ -81,7 +81,7 @@ public class ArcanaPairLibrary
 
             if (GetPair(baseArcana, card) == null)
             {
-                Debug.LogError($"Missing pair SO asset!: {baseArcana.name} + {card.name}");
+                Debug.LogError($"Missing pair SO asset!: {baseArcana.title} + {card.title}");
                 allPresent = false;
             }
         }

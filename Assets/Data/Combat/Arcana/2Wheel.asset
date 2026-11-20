@@ -13,6 +13,6 @@ MonoBehaviour:
   m_Name: 2Wheel
   m_EditorClassIdentifier: Assembly-CSharp::ArcanaData
   id: 2
-  name: The Wheel
+  title: The Wheel
   desc: Arcana test 1
   icon: {fileID: 0}

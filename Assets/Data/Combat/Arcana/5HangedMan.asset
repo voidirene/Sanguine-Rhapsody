@@ -13,6 +13,6 @@ MonoBehaviour:
   m_Name: 5HangedMan
   m_EditorClassIdentifier: Assembly-CSharp::ArcanaData
   id: 5
-  name: The Hanged Man
+  title: The Hanged Man
   desc: Arcana test 4
   icon: {fileID: 0}

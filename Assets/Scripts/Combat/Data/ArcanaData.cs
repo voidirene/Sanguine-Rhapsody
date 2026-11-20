@@ -4,7 +4,7 @@ using UnityEngine;
 public class ArcanaData : ScriptableObject
 {
     public int id;
-    public string name;
+    public string title;
     public string desc;
     public Texture2D icon;
     

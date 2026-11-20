@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0f3a8010ffb606c4d96bed2b7bc0f61b, type: 3}
   m_Name: Tech_1()L
   m_EditorClassIdentifier: Assembly-CSharp::AttackData
-  clip: {fileID: 0}
+  clip: {fileID: 7400000, guid: 51f7975cbb827c24989dcafbd86650fd, type: 2}
   stateName: Tech_1<>L
   allowStateNameMismatch: 1
   crossFadeTime: 0.1

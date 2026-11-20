@@ -56,7 +56,7 @@ namespace Gamekit3D
         /// Will pick a random clip to play in the assigned list. If you pass a material, it will try to find an
         /// override for that materials or play the default clip if none can ben found.
         /// </summary>
-        /// <param name="overrideMaterial"></param>
+        /// <param title="overrideMaterial"></param>
         /// <returns> Return the choosen audio clip, null if none </returns>
         public AudioClip PlayRandomClip(Material overrideMaterial, int bankId = 0)
         {

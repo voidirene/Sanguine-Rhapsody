@@ -13,6 +13,6 @@ MonoBehaviour:
   m_Name: 4Fool
   m_EditorClassIdentifier: Assembly-CSharp::ArcanaData
   id: 4
-  name: The Fool
+  title: The Fool
   desc: Arcana test 3
   icon: {fileID: 0}

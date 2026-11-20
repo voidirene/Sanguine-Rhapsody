@@ -7,8 +7,10 @@ public class ArcanaPairData : ScriptableObject
     public ArcanaData arcanaA;
     public ArcanaData arcanaB;
 
+    // Text fields if we want them???
     [Header("Info")]
+    [TextArea] public string title;
     [TextArea] public string description;
     
-    public string effect; // WIP: figure out a type for this later
+    public StatModifier[] effects;
 }

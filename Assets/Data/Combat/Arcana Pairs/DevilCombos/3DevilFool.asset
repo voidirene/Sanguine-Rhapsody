@@ -14,4 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::ArcanaPairData
   arcanaA: {fileID: 11400000, guid: 38a66485220deff43bb2555e6a7915b1, type: 2}
   arcanaB: {fileID: 11400000, guid: f6aae6ffc341e9d4c8bf37cce37852b4, type: 2}
-  effect: 
+  title: 
+  description: 
+  effects:
+  - {fileID: 11400000, guid: ccf87cf2e5437934ba8f9dd8c45acd04, type: 2}

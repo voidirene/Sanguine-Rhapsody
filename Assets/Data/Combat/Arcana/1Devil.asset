@@ -13,6 +13,6 @@ MonoBehaviour:
   m_Name: 1Devil
   m_EditorClassIdentifier: Assembly-CSharp::ArcanaData
   id: 1
-  name: The Devil
+  title: The Devil
   desc: Atreus' arcana.
   icon: {fileID: 0}
