@@ -16,6 +16,8 @@ namespace StarterAssets
 		public bool dodge;
 		public bool transformation;
 		public bool drawArcana;
+		public bool discardArcana;
+		public bool stashArcana;
 		[SerializeField] float tapWindow = 0.2f;
 		float _pressTime;
 		bool _pressed;
@@ -100,6 +102,14 @@ namespace StarterAssets
 		{
 			DrawArcanaInput(value.isPressed);
 		}
+		public void OnDiscardArcana(InputValue value)
+		{
+			DiscardArcanaInput(value.isPressed);
+		}
+		public void OnStashArcana(InputValue value)
+		{
+			StashArcanaInput(value.isPressed);
+		}
 		
 #endif
 
@@ -152,6 +162,14 @@ namespace StarterAssets
 		public void DrawArcanaInput(bool newDrawArcanaState)
 		{
 			drawArcana = newDrawArcanaState;
+		}
+		public void DiscardArcanaInput(bool newDiscardArcanaState)
+		{
+			discardArcana = newDiscardArcanaState;
+		}
+		public void StashArcanaInput(bool newStashArcanaState)
+		{
+			stashArcana = newStashArcanaState;
 		}
 		
 		private void OnApplicationFocus(bool hasFocus)

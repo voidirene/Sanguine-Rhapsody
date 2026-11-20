@@ -48,7 +48,7 @@ public class AttackData : ScriptableObject
         // Raising cancelWindowStart past exitTime pushes exitTime up with it.
         exitTime = Mathf.Max(exitTime, cancelWindowStart);
         
-        // OPTIONAL: default the state name to the clip's name
+        // OPTIONAL: default the state title to the clip's title
         if (clip != null && string.IsNullOrEmpty(stateName))
             stateName = clip.name;
 
@@ -57,7 +57,7 @@ public class AttackData : ScriptableObject
                              "Fix it, or tick Allow State Name Mismatch if that's intended.", this);
 
         if (clip == null && !string.IsNullOrEmpty(stateName))
-            Debug.LogWarning($"{name}: has a state name but no clip, so the controller " +
+            Debug.LogWarning($"{name}: has a state title but no clip, so the controller " +
                              "has no clip.length to compute progress from.", this);
         
         RefreshHash();

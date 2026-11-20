@@ -7,7 +7,8 @@ namespace Gamekit3D
 {
     public class MeleeWeapon : MonoBehaviour
     {
-        public int damage = 1;
+        public float baseDamage = 1; //weapon damage
+        public float multiplierDamage = 1; //bonus from stats & arcanas
 
         [System.Serializable]
         public class AttackPoint
@@ -41,8 +42,6 @@ namespace Gamekit3D
 
         protected Vector3[] m_PreviousPos = null;
         protected Vector3 m_Direction;
-
-        protected float m_DamageMultiplier = 1f;
         
         protected bool m_IsThrowingHit = false;
         protected bool m_InAttack = false;
@@ -194,7 +193,8 @@ namespace Gamekit3D
 
             Damageable.DamageMessage data;
 
-            data.amount = Mathf.RoundToInt(damage * m_DamageMultiplier);
+            data.amount = baseDamage * multiplierDamage;
+            Debug.Log($"Weapon Damage: {data.amount}, Base: {baseDamage}, Bonus: {multiplierDamage}");
             data.damager = this;
             data.direction = m_Direction.normalized;
             data.damageSource = m_Owner.transform.position;

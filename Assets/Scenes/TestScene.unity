@@ -716,8 +716,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 283859905}
-  - component: {fileID: 283859907}
   - component: {fileID: 283859906}
+  - component: {fileID: 283859907}
   m_Layer: 8
   m_Name: Combat
   m_TagString: Untagged
@@ -752,8 +752,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0149b5ab8f608c943b260125ac76d875, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Gamekit3D.Damageable
-  maxHitPoints: 5
-  invulnerabiltyTime: 3
+  maxHitPoints: 10
+  invulnerabiltyTime: 1
   hitAngle: 360
   hitForwardRotation: 360
   OnDeath:
@@ -795,7 +795,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3979bd2236b5f2b418b767bcaa29f682, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Gamekit3D.MeleeWeapon
-  damage: 1
+  baseDamage: 1
+  multiplierDamage: 1
   hitParticlePrefab: {fileID: 0}
   targetLayers:
     serializedVersion: 2
@@ -940,6 +941,74 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 4416926081852918481, guid: 64dce48905ffd9b4293e595fa6941544, type: 3}
   m_PrefabInstance: {fileID: 1191882767}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &595236359
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 595236360}
+  - component: {fileID: 595236361}
+  - component: {fileID: 595236362}
+  m_Layer: 8
+  m_Name: Stats
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &595236360
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 595236359}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1191882769}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &595236361
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 595236359}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3bb616afbcf2fb34fae283f13efe0c79, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerStats
+  baseStats:
+  - stat: 0
+    value: 1
+  - stat: 1
+    value: 1
+  - stat: 2
+    value: 1
+  - stat: 3
+    value: 1
+  - stat: 4
+    value: 1
+--- !u!114 &595236362
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 595236359}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e42f695b9176a8489cb27ea1fd87eb2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerStatsController
 --- !u!1 &726764827
 GameObject:
   m_ObjectHideFlags: 0
@@ -1018,7 +1087,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EcstasyMeterSettings
   maxValue: 100
-  passiveFillPerSecond: 15
+  passiveFillPerSecond: 30
   drainPerSecond: 6
   baseGainPerHit: 2
   transformThreshold: 70
@@ -1411,10 +1480,16 @@ PrefabInstance:
     m_AddedGameObjects:
     - targetCorrespondingSourceObject: {fileID: 3893294197879345259, guid: 64dce48905ffd9b4293e595fa6941544, type: 3}
       insertIndex: -1
+      addedObject: {fileID: 595236360}
+    - targetCorrespondingSourceObject: {fileID: 3893294197879345259, guid: 64dce48905ffd9b4293e595fa6941544, type: 3}
+      insertIndex: -1
       addedObject: {fileID: 283859905}
     - targetCorrespondingSourceObject: {fileID: 3893294197879345259, guid: 64dce48905ffd9b4293e595fa6941544, type: 3}
       insertIndex: -1
       addedObject: {fileID: 726764828}
+    - targetCorrespondingSourceObject: {fileID: 3893294197879345259, guid: 64dce48905ffd9b4293e595fa6941544, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1881403599}
     - targetCorrespondingSourceObject: {fileID: 3893294197879345259, guid: 64dce48905ffd9b4293e595fa6941544, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1739838640}
@@ -2284,7 +2359,7 @@ Transform:
   m_GameObject: {fileID: 1739838639}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.981, z: 0.545}
+  m_LocalPosition: {x: 0, y: 1, z: 0.5}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -2482,7 +2557,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0149b5ab8f608c943b260125ac76d875, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Gamekit3D.Damageable
-  maxHitPoints: 10
+  maxHitPoints: 100
   invulnerabiltyTime: 0
   hitAngle: 360
   hitForwardRotation: 360
@@ -2513,6 +2588,80 @@ MonoBehaviour:
   OnResetDamage:
     m_PersistentCalls:
       m_Calls: []
+--- !u!1 &1881403598
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1881403599}
+  - component: {fileID: 1881403600}
+  - component: {fileID: 1881403601}
+  m_Layer: 8
+  m_Name: Arcana
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1881403599
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1881403598}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1191882769}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1881403600
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1881403598}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4c8a2323280cc28408981bddc87732f9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ArcanaController
+  characterArcana: {fileID: 11400000, guid: 38a66485220deff43bb2555e6a7915b1, type: 2}
+  drawnArcana: {fileID: 0}
+  stashedArcana: {fileID: 0}
+  ArcanaInPool:
+  - {fileID: 11400000, guid: 2d3c6d8a17fa84140b4b728c39457dd2, type: 2}
+  - {fileID: 11400000, guid: 6c32d5ced42c02b42afffbfd66833b5e, type: 2}
+  - {fileID: 11400000, guid: f6aae6ffc341e9d4c8bf37cce37852b4, type: 2}
+  - {fileID: 11400000, guid: c45ece08019a1324297715b2b75d50af, type: 2}
+  - {fileID: 11400000, guid: 3bb764980d0fcb044a4c1aceee2d57d8, type: 2}
+  ArcanaDiscardPile: []
+  redrawCooldown: 2
+  allPairs:
+  - {fileID: 11400000, guid: b5e4ef1a9ea099c459bc2b4d7b4ef25a, type: 2}
+  - {fileID: 11400000, guid: 0c46ffbfcbbbc2945aee68a08fe0beed, type: 2}
+  - {fileID: 11400000, guid: 54e4dfa8cad4035459dfb6e43a08ccfc, type: 2}
+  - {fileID: 11400000, guid: 7f7a90d2a25de7045bd77e306a11202d, type: 2}
+  - {fileID: 11400000, guid: 51ecdf075f1428347bb705671465ca71, type: 2}
+--- !u!114 &1881403601
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1881403598}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7dc3c12c601726f4e84da9a3baf9d7bf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ArcanaPairEffectController
 --- !u!1001 &1955044389
 PrefabInstance:
   m_ObjectHideFlags: 0
