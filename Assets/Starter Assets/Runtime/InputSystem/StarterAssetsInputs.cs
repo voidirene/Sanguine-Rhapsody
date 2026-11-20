@@ -14,15 +14,12 @@ namespace StarterAssets
 		public bool walk;
 		public bool sprint;
 		public bool dodge;
-		public bool transformation;
-		public bool drawArcana;
-		public bool discardArcana;
-		public bool stashArcana;
-		[SerializeField] float tapWindow = 0.2f;
+		[SerializeField] float dodgeTapWindow = 0.2f;
 		float _pressTime;
 		bool _pressed;
-		public bool lightAttack;
-		public bool heavyAttack;
+		public bool transformation;
+		public bool drawArcana, discardArcana, stashArcana;
+		public bool lightAttack, heavyAttack;
 		public bool block;
 
 		[Header("Movement Settings")]
@@ -60,7 +57,7 @@ namespace StarterAssets
 
 		void Update()
 		{
-			if (_pressed && !sprint && Time.time - _pressTime >= tapWindow)
+			if (_pressed && !sprint && Time.time - _pressTime >= dodgeTapWindow)
 				sprint = true;
 		}
 		

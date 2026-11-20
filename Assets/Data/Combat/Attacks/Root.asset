@@ -178,7 +178,7 @@ MonoBehaviour:
     transformation: 0
   - input: 1
     nextAttack: {fileID: 11400000, guid: 3d8903ae94996514789cc1511053d3df, type: 2}
-    priority: -10
+    priority: 10
     movingForward: 0
     movingBackward: 0
     movingLeft: 0
@@ -191,7 +191,7 @@ MonoBehaviour:
     transformation: 0
   - input: 2
     nextAttack: {fileID: 11400000, guid: f3531cf48928ba7439234e036d8dfe4e, type: 2}
-    priority: -10
+    priority: 10
     movingForward: 0
     movingBackward: 0
     movingLeft: 0
