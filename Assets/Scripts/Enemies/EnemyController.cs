@@ -2,6 +2,7 @@ using System;
 using Gamekit3D;
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.Pool;
 
 // like the crudest, simplest and LEAST efficient enemy controller known to man
 public class EnemyController : MonoBehaviour
@@ -19,10 +20,15 @@ public class EnemyController : MonoBehaviour
     private Transform _player;
     private NavMeshAgent _agent;
     private EnemyMeleeWeapon _weapon;
+    private IObjectPool<GameObject> _enemyPool;
+
+    [NonSerialized] public int id;
+    
+    private Action OnEnemyDestroyed;
     
     void Awake()
     {
-        _player = GameObject.FindGameObjectWithTag("Player").transform;
+        _player = UnityEngine.GameObject.FindGameObjectWithTag("Player").transform;
         _agent = transform.parent.GetComponentInChildren<NavMeshAgent>();
         _weapon = transform.parent.GetComponentInChildren<EnemyMeleeWeapon>();
         _weapon.SetOwner(this.gameObject);
@@ -73,5 +79,16 @@ public class EnemyController : MonoBehaviour
     private void ResetAttack()
     {
         _isAttacking = false;
+    }
+
+    public void SetPool(IObjectPool<GameObject> pool)
+    {
+        _enemyPool = pool;   
+    }
+
+    public void DestroyEnemy()
+    {
+        _enemyPool.Release(this.gameObject);
+        OnEnemyDestroyed.Invoke();
     }
 }
