@@ -87,7 +87,6 @@ public class ComboTransition
     public bool holdingAttackInput;
     [Min(0f)] public float minTimeInCancelWindow;   // in seconds
     public AirRequirement air = AirRequirement.Any;
-    public bool dodged;
     public bool blocking;
     public bool transformation;
     
@@ -107,8 +106,6 @@ public class ComboTransition
         // Airborne/Jumping
         if (air == AirRequirement.Grounded && !conditions.IsGrounded) return false;
         if (air == AirRequirement.Airborne && conditions.IsGrounded) return false;
-        // Dodge
-        if (dodged && !conditions.JustDodged) return false;
         // Blocking
         if (blocking && !conditions.IsBlocking) return false;
         if (transformation && !conditions.IsTransformed) return false;

@@ -15,9 +15,15 @@ public class WeaponController : MonoBehaviour
     private AttackInput _bufferedInput = AttackInput.None;
     private float _bufferedTime;
     
+    [Header("Hold Detection")]
+    [Tooltip("In seconds, how long to hold down an input for in order to be considered a hold")]
+    [SerializeField] private float holdThreshold = 0.25f;
+    private readonly HoldDetector _lightButton = new HoldDetector();
+    private readonly HoldDetector _heavyButton = new HoldDetector();
+    
     [Space(10)]
     [Header("Combo")]
-    [Tooltip("The idle node. Its transitions are the attacks you can start from standing.")]
+    [Tooltip("The idle node. Its transitions are the attacks you can start from standing (check the Root AttackNode asset")]
     [SerializeField] private AttackData rootAttack;
     [SerializeField] private float returnToLocomotionBlend = 0.15f;
     private AttackData _currentAttack; // rootAttack when idle
@@ -77,7 +83,10 @@ public class WeaponController : MonoBehaviour
     private void CaptureInput()
     {
         if (!canAttack)
-            return;
+        {
+            CancelHoldTracking();
+            return; 
+        }
 
         // Heavy is checked second, so if both land on the same frame, heavy wins
         // Ask Kenneth: do we want priorities like this?
@@ -85,11 +94,24 @@ public class WeaponController : MonoBehaviour
             BufferInput(AttackInput.Block);
         if (_input.dodge)
             BufferInput(AttackInput.Dodge);
-        if (_input.lightAttack)
-            BufferInput(AttackInput.Light);
-        if (_input.heavyAttack)
-            BufferInput(AttackInput.Heavy);
+        
+        HandleHoldable(_lightButton, _input.lightAttack, _input.lightAttackHeld, AttackInput.Light, AttackInput.LightHold);
+        HandleHoldable(_heavyButton, _input.heavyAttack, _input.heavyAttackHeld, AttackInput.Heavy, AttackInput.HeavyHold);
     }
+    
+    private void HandleHoldable(HoldDetector detector, bool pressed, bool held, AttackInput tap, AttackInput hold)
+    {
+        // Check if the current node actually has a hold branch for it 
+        bool holdPossible = pressed && FindNext(_currentAttack, hold, SetConditions()) != null;
+
+        switch (detector.Tick(pressed, held, holdThreshold, holdPossible))
+        {
+            case ButtonEvent.Tap:  BufferInput(tap);  break;
+            case ButtonEvent.Hold: BufferInput(hold); break;
+        }
+    }
+    
+    private void CancelHoldTracking() { _lightButton.Cancel(); _heavyButton.Cancel(); }
     
     private void BufferInput(AttackInput input)
     {
@@ -235,20 +257,18 @@ public class WeaponController : MonoBehaviour
         // Movement
         Vector2 moveInput = _input.move;
         // Holding attack input
-        bool holdingAttackInput = _input.lightAttack || _input.heavyAttack; // WIP: this might not be too robust, test it a lot
+        bool holdingAttackInput = _input.lightAttackHeld || _input.heavyAttackHeld; // WIP: with the new tap/hold detection system we might not need to keep track of this bool anymore?
         // Pause between attacks (0 when idle or when still mid-attack)
         float windowOpensAt = _currentAttack.cancelWindowStart * _currentAttack.Duration;
         float timeInCancelWindow = IsIdle ? 0f : Mathf.Max(0f, _elapsed - windowOpensAt);
         // Airborne/Jumping
         bool isGrounded = _controller.Grounded;
-        // Dodge
-        bool justDodged = _input.sprint; // WIP: this currently just checks if we're sprinting. sprint and dodge are the same button, but dodge is a tap while sprint is a hold. implement dodge functionality
         // Blocking
         bool isBlocking = _input.block;
         // Transformation
         bool isTransformed = _transformation.currentForm == TransformationController.CharacterForm.Transformed;
 
-        return new AttackConditions(moveInput, holdingAttackInput, timeInCancelWindow, isGrounded, justDodged, isBlocking, isTransformed);
+        return new AttackConditions(moveInput, holdingAttackInput, timeInCancelWindow, isGrounded, isBlocking, isTransformed);
     }
 
     #endregion

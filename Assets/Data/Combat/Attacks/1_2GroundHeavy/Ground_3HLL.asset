@@ -20,7 +20,7 @@ MonoBehaviour:
   exitTime: 0.9
   damageMultiplier: 2
   transitions:
-  - input: 2
+  - input: 3
     nextAttack: {fileID: 11400000, guid: a88ff45b999bfc440954a1ee0f0fac4c, type: 2}
     priority: 0
     movingForward: 0
@@ -28,7 +28,7 @@ MonoBehaviour:
     movingLeft: 0
     movingRight: 0
     holdingAttackInput: 0
-    minTimeInCancelWindow: 0
+    minTimeInCancelWindow: 0.3
     air: 1
-    dodged: 0
     blocking: 0
+    transformation: 0
