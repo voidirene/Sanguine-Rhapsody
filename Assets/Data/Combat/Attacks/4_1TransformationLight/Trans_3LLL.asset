@@ -29,11 +29,10 @@ MonoBehaviour:
     movingRight: 0
     holdingAttackInput: 0
     minTimeInCancelWindow: 0
-    air: 1
-    dodged: 0
+    air: 0
     blocking: 0
     transformation: 1
-  - input: 2
+  - input: 3
     nextAttack: {fileID: 11400000, guid: 0cfa351245fc74141a131edf84bd35cc, type: 2}
     priority: 100
     movingForward: 0
@@ -42,20 +41,18 @@ MonoBehaviour:
     movingRight: 0
     holdingAttackInput: 0
     minTimeInCancelWindow: 0
-    air: 1
-    dodged: 0
+    air: 0
     blocking: 0
     transformation: 1
-  - input: 2
+  - input: 3
     nextAttack: {fileID: 11400000, guid: b108f422bbd74c144b6395bf63985b65, type: 2}
-    priority: 100
+    priority: 150
     movingForward: 0
     movingBackward: 0
     movingLeft: 0
     movingRight: 0
     holdingAttackInput: 1
-    minTimeInCancelWindow: 0
-    air: 1
-    dodged: 0
+    minTimeInCancelWindow: 0.3
+    air: 0
     blocking: 0
     transformation: 1

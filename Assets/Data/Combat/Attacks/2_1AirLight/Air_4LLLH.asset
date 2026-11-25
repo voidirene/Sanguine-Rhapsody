@@ -30,9 +30,9 @@ MonoBehaviour:
     holdingAttackInput: 0
     minTimeInCancelWindow: 0
     air: 2
-    dodged: 0
     blocking: 0
-  - input: 2
+    transformation: 0
+  - input: 3
     nextAttack: {fileID: 11400000, guid: 198f1d5acb3156345ac1b0a9d3d402c6, type: 2}
     priority: 0
     movingForward: 0
@@ -42,5 +42,5 @@ MonoBehaviour:
     holdingAttackInput: 0
     minTimeInCancelWindow: 0
     air: 2
-    dodged: 0
     blocking: 0
+    transformation: 0
