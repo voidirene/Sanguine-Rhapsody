@@ -15,8 +15,34 @@ MonoBehaviour:
   clip: {fileID: 7400000, guid: ecce333853c8aa748af0920cfa256ff1, type: 2}
   stateName: Dodge
   allowStateNameMismatch: 1
-  crossFadeTime: 0.1
+  crossFadeTime: 0.3
   cancelWindowStart: 0.5
   exitTime: 0.9
   damageMultiplier: 1
-  transitions: []
+  transitions:
+  - input: 1
+    nextAttack: {fileID: 11400000, guid: 3d8903ae94996514789cc1511053d3df, type: 2}
+    priority: 50
+    movingForward: 0
+    movingBackward: 0
+    movingLeft: 0
+    movingRight: 0
+    holdingAttackInput: 0
+    minTimeInCancelWindow: 0
+    air: 0
+    dodged: 0
+    blocking: 0
+    transformation: 0
+  - input: 3
+    nextAttack: {fileID: 11400000, guid: 3d8903ae94996514789cc1511053d3df, type: 2}
+    priority: 50
+    movingForward: 0
+    movingBackward: 0
+    movingLeft: 0
+    movingRight: 0
+    holdingAttackInput: 0
+    minTimeInCancelWindow: 0
+    air: 0
+    dodged: 0
+    blocking: 0
+    transformation: 0
