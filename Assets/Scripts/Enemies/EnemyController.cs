@@ -16,6 +16,7 @@ public class EnemyController : MonoBehaviour
     public AttackData enemyAttack;
     public float timeBetweenAttacks;
     private bool _isAttacking;
+    private float _attackEndTime;
     public float attackRange;
     public bool playerInRange;
     
@@ -47,6 +48,9 @@ public class EnemyController : MonoBehaviour
     {
         if (active)
         {
+            if (_isAttacking && Time.time >= _attackEndTime)
+                ResetAttacking();
+            
             transform.LookAt(_player.position);
             float distance = Vector3.Distance(_player.position, transform.parent.position);
             if (distance <= attackRange)
@@ -86,6 +90,7 @@ public class EnemyController : MonoBehaviour
         if (!_isAttacking)
         {
             _isAttacking = true;
+            _attackEndTime = Time.time + enemyAttack.clip.length;
             
             _weapon.BeginAttack(false);
             _animator.CrossFadeInFixedTime(enemyAttack.StateHash, enemyAttack.crossFadeTime);
@@ -93,8 +98,12 @@ public class EnemyController : MonoBehaviour
     }
     private void StopAttack()
     {
-        _isAttacking = false;
         _weapon.EndAttack();
+    }
+
+    private void ResetAttacking()
+    {
+        _isAttacking = false;
         _animator.CrossFadeInFixedTime(HashLocomotion, returnToLocomotionBlend);
     }
 
