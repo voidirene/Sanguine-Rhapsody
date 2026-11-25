@@ -1,11 +1,10 @@
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Pool;
 
 public class EnemySpawner : MonoBehaviour
 {
     [Header("Enemy Prefab")]
-    [SerializeField] private GameObject enemy;
+    [SerializeField] private GameObject enemyPrefab;
     
     [Space(10)]
     [Header("Spawn Settings")]
@@ -13,34 +12,67 @@ public class EnemySpawner : MonoBehaviour
     [SerializeField] private float spawnRate = 5f;
     [SerializeField] private int maxEnemies = 10;
 
-    private IObjectPool<GameObject> _enemyPool;
-    private List<EnemyController> _currentEnemies;
-    private float _timeSinceLastSpawn;
+    private ObjectPool<GameObject> _enemyPool;
+    private float _nextSpawnTime;
 
-    void Awake()
+    private void Awake()
     {
-        
-    }
-    
-    void Start()
-    {
-        _enemyPool = new ObjectPool<GameObject>(CreateEnemy);
-    }
-    
-    void Update()
-    {
-        if (_currentEnemies.Count < maxEnemies && Time.time > _timeSinceLastSpawn) // WIP: implement counting current enemies so we can stop spawning
+        if (enemyPrefab == null || spawnPoints.Length == 0)
         {
-            _enemyPool.Get();
-            enemy.GetComponentInChildren<EnemyController>().SetPool(_enemyPool);
-            _timeSinceLastSpawn = Time.time + spawnRate;
+            Debug.LogError("Either the enemy prefab is missing, or there is no spawn points!!", this);
+            enabled = false;
+            return;
         }
+ 
+        _enemyPool = new ObjectPool<GameObject>(
+            createFunc: CreateEnemy,
+            actionOnGet: OnGetEnemy,
+            actionOnRelease: OnReleaseEnemy,
+            actionOnDestroy: OnDestroyEnemy,
+            collectionCheck: true,
+            defaultCapacity: maxEnemies,
+            maxSize: maxEnemies);
+    }
+    private void OnDestroy()
+    {
+        _enemyPool?.Dispose();
     }
 
+    private void Update()
+    {
+        if (Time.time < _nextSpawnTime)
+            return;
+ 
+        _nextSpawnTime = Time.time + spawnRate;
+ 
+        if (_enemyPool.CountActive < maxEnemies)
+            _enemyPool.Get();
+    }
+ 
     private GameObject CreateEnemy()
     {
-        GameObject enemy = Instantiate(this.enemy);
-        _currentEnemies.Add(enemy.GetComponentInChildren<EnemyController>());
+        GameObject enemy = Instantiate(enemyPrefab);
+        enemy.SetActive(false);
+ 
+        enemy.GetComponentInChildren<EnemyController>().SetPool(_enemyPool);
         return enemy;
+    }
+ 
+    private void OnGetEnemy(GameObject enemy)
+    {
+        Transform point = spawnPoints[Random.Range(0, spawnPoints.Length)];
+ 
+        enemy.transform.SetPositionAndRotation(point.position, point.rotation);
+        enemy.SetActive(true);
+    }
+ 
+    private void OnReleaseEnemy(GameObject enemy)
+    {
+        enemy.SetActive(false);
+    }
+ 
+    private void OnDestroyEnemy(GameObject enemy)
+    {
+        Destroy(enemy);
     }
 }

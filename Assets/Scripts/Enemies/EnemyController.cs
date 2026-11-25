@@ -8,27 +8,36 @@ using UnityEngine.Pool;
 public class EnemyController : MonoBehaviour
 {
     public bool active = true;
+    
     public LayerMask whatIsGround; 
     public LayerMask whatIsPlayer;
     
     // Attacking variables
+    public AttackData enemyAttack;
     public float timeBetweenAttacks;
     private bool _isAttacking;
     public float attackRange;
     public bool playerInRange;
     
+    [SerializeField] private float returnToLocomotionBlend = 0.15f;
+    
+    [SerializeField] private float repathInterval = 0.2f;
+    private float _nextRepathTime;
+    
     private Transform _player;
     private NavMeshAgent _agent;
     private EnemyMeleeWeapon _weapon;
     private IObjectPool<GameObject> _enemyPool;
-
-    [NonSerialized] public int id;
+    private Animator _animator;
     
-    private Action OnEnemyDestroyed;
+    private static readonly int HashLocomotion = Animator.StringToHash("walk cycle");
+    
+    private Action<EnemyController> OnEnemyDestroyed;
     
     void Awake()
     {
-        _player = UnityEngine.GameObject.FindGameObjectWithTag("Player").transform;
+        _player = GameObject.FindGameObjectWithTag("Player").transform;
+        _animator = transform.parent.GetComponentInChildren<Animator>();
         _agent = transform.parent.GetComponentInChildren<NavMeshAgent>();
         _weapon = transform.parent.GetComponentInChildren<EnemyMeleeWeapon>();
         _weapon.SetOwner(this.gameObject);
@@ -48,37 +57,45 @@ public class EnemyController : MonoBehaviour
             if (!playerInRange)
                 ChasePlayer();
             else
-                AttackPlayer();
+                StartAttack();
         }
     }
     
     private void ChasePlayer()
     {
-        _agent.SetDestination(_player.position);
+        if (_agent.isStopped)
+        {
+            _agent.isStopped = false;
+            _nextRepathTime = 0f;
+        }
+ 
+        if (Time.time >= _nextRepathTime) // This is here because we don't want to set the agent path every frame. expensiv
+        {
+            _nextRepathTime = Time.time + repathInterval;
+            _agent.SetDestination(_player.position);
+        }
     }
 
-    private void AttackPlayer()
+    private void StartAttack()
     {
-        _agent.SetDestination(transform.position);
+        _agent.isStopped = true;
+        
+        if (_weapon)
+            _weapon.EndAttack();   // close any open hit window
         
         if (!_isAttacking)
         {
             _isAttacking = true;
-            _weapon.BeginAttack(false);
             
-            Invoke(nameof(StopAttack), 0.3f);
-            Invoke(nameof(ResetAttack), timeBetweenAttacks);
+            _weapon.BeginAttack(false);
+            _animator.CrossFadeInFixedTime(enemyAttack.StateHash, enemyAttack.crossFadeTime);
         }
     }
-
     private void StopAttack()
     {
-        _weapon.EndAttack();
-    }
-
-    private void ResetAttack()
-    {
         _isAttacking = false;
+        _weapon.EndAttack();
+        _animator.CrossFadeInFixedTime(HashLocomotion, returnToLocomotionBlend);
     }
 
     public void SetPool(IObjectPool<GameObject> pool)
@@ -88,7 +105,11 @@ public class EnemyController : MonoBehaviour
 
     public void DestroyEnemy()
     {
-        _enemyPool.Release(this.gameObject);
-        OnEnemyDestroyed.Invoke();
+        OnEnemyDestroyed?.Invoke(this); // call this BEFORE releasing/destroying the enemy
+ 
+        if (_enemyPool != null)
+            _enemyPool.Release(gameObject);
+        else
+            Destroy(gameObject);// ideally we'll never have to directly destroy...
     }
 }

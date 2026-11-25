@@ -1086,10 +1086,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7a9e31b92edd43243b1746d13a96c4ff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemySpawner
-  enemy: {fileID: 4538732912212496436, guid: 865f2a460fda0644ba06d6503fca2fbc, type: 3}
+  enemyPrefab: {fileID: 4538732912212496436, guid: 865f2a460fda0644ba06d6503fca2fbc, type: 3}
   spawnPoints:
   - {fileID: 896069745}
   spawnRate: 10
+  maxEnemies: 10
 --- !u!1 &726764827
 GameObject:
   m_ObjectHideFlags: 0
@@ -1645,6 +1646,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::WeaponController
   canAttack: 1
   bufferDuration: 0.2
+  holdThreshold: 0.25
   rootAttack: {fileID: 11400000, guid: ee3d54fa78cc8284a9da7c166a1578e9, type: 2}
   returnToLocomotionBlend: 0.15
 --- !u!114 &1191882783
