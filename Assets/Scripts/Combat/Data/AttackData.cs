@@ -1,8 +1,6 @@
 using System;
 using System.Collections.Generic;
-using System.Linq.Expressions;
 using Unity.VisualScripting;
-using UnityEditor.Animations;
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "AttackData", menuName = "Scriptable Objects/AttackData")]
