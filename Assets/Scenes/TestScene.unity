@@ -1090,7 +1090,7 @@ MonoBehaviour:
   spawnPoints:
   - {fileID: 896069745}
   spawnRate: 10
-  maxEnemies: 10
+  maxEnemies: 5
 --- !u!1 &726764827
 GameObject:
   m_ObjectHideFlags: 0

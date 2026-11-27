@@ -30,5 +30,5 @@ MonoBehaviour:
     holdingAttackInput: 0
     minTimeInCancelWindow: 0
     air: 1
-    dodged: 0
     blocking: 0
+    transformation: 0

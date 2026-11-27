@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0f3a8010ffb606c4d96bed2b7bc0f61b, type: 3}
   m_Name: Ground_3HHH
   m_EditorClassIdentifier: Assembly-CSharp::AttackData
-  clip: {fileID: 7400000, guid: 7dbd5cbd4a21e704eb6842ce2394b8d4, type: 2}
+  clip: {fileID: 7400000, guid: 5244f34f081491041a3135009534eb3c, type: 2}
   stateName: Ground_3HHH
   allowStateNameMismatch: 1
   crossFadeTime: 0.1
