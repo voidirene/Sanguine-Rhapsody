@@ -1,5 +1,6 @@
 using Gamekit3D;
 using StarterAssets;
+using Unity.VisualScripting;
 using UnityEngine;
 
 // NOTE: certain things like the actual attack logic are triggered through the animator using functions like OnMeleeAttackStart
@@ -36,7 +37,7 @@ public class WeaponController : MonoBehaviour
     private MeleeWeapon _meleeWeapon;
     private RangeWeapon _rangeWeapon;
     private TransformationController _transformation;
-    private Animator _animator;
+    [DoNotSerialize] public Animator animator;
     
     private static readonly int HashLocomotion = Animator.StringToHash("Idle Walk Run Blend");
 
@@ -45,7 +46,7 @@ public class WeaponController : MonoBehaviour
         _controller = GetComponent<ThirdPersonController>();
         _input = GetComponent<StarterAssetsInputs>();
         _lock = GetComponent<PlayerLock>();
-        _animator = GetComponent<Animator>();
+        animator = GetComponent<Animator>();
         
         _transformation = GetComponentInChildren<TransformationController>();
         _meleeWeapon = GetComponentInChildren<MeleeWeapon>();
@@ -166,7 +167,7 @@ public class WeaponController : MonoBehaviour
         }
 
         // Count time passing since the start of an attack
-        _elapsed += Time.deltaTime * _animator.speed;
+        _elapsed += Time.deltaTime * animator.speed;
         float progress = _elapsed / Mathf.Max(_currentAttack.Duration, 0.01f);
 
         // If enough time has passed for us to enter exitTime, return to locomotion
@@ -222,7 +223,8 @@ public class WeaponController : MonoBehaviour
         _currentAttack = next;
         _elapsed = 0f;
 
-        _animator.CrossFadeInFixedTime(next.StateHash, next.crossFadeTime);
+        animator.applyRootMotion = true;
+        animator.CrossFadeInFixedTime(next.StateHash, next.crossFadeTime);
 
         ConsumeBuffer();
     }
@@ -235,8 +237,9 @@ public class WeaponController : MonoBehaviour
 
         _currentAttack = rootAttack;
         _elapsed = 0f;
-
-        _animator.CrossFadeInFixedTime(HashLocomotion, returnToLocomotionBlend);
+        
+        animator.applyRootMotion = false;
+        animator.CrossFadeInFixedTime(HashLocomotion, returnToLocomotionBlend);
     }
 
     // Aborting may happen because of the character getting hurt, dying, a cutscene, etc

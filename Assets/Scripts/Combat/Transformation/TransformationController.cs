@@ -29,6 +29,7 @@ public class TransformationController : MonoBehaviour
     private static readonly int HashLocomotion = Animator.StringToHash("Idle Walk Run Blend");
     private static readonly int HashTransformation = Animator.StringToHash("Transformation");
     
+    public event Action OnChangeFormToTransformation;
     public event Action OnChangeFormToNormal;
 
     private void Awake()
@@ -91,12 +92,12 @@ public class TransformationController : MonoBehaviour
 
         // Wait for the transformation Anim to end
         yield return
-            new WaitForSeconds(
-                _transformationAnimLength); // WIP: this could maybe be an Animation Event instead?? it's more precise and more robust most likely
+            new WaitForSeconds(_transformationAnimLength); // WIP: this could maybe be an Animation Event instead?? it's more precise and more robust most likely
 
         currentForm = CharacterForm.Transformed; // WIP: Should this be set before or after the WaitForSeconds???
         _animator.CrossFadeInFixedTime(HashLocomotion, locomotionCrossFadeTime);
         _ecstasyMeter.SetMode(EcstasyMeter.MeterMode.Draining); // Start draining ecstasy
+        OnChangeFormToTransformation?.Invoke();
         _lock.Unlock(this);
     }
 
@@ -114,7 +115,7 @@ public class TransformationController : MonoBehaviour
 
         currentForm = CharacterForm.Normal;
         _ecstasyMeter.SetMode(EcstasyMeter.MeterMode.Filling);
-        OnChangeFormToNormal?.Invoke(); // Might not be needed anymore after some code changes...
+        OnChangeFormToNormal?.Invoke(); // Might not be needed anymore after some code changes...?
     }
 
     private void ResetTransformationInput()
