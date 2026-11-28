@@ -230,7 +230,7 @@ namespace StarterAssets
                 _cinemachineTargetYaw, 0.0f);
         }
 
-        private void Move()
+        public void Move()
         {
             // set target speed based on move speed...
             float targetSpeed = MoveSpeed;
@@ -301,7 +301,6 @@ namespace StarterAssets
             // update animator if using character
             if (_hasAnimator)
             {
-                Debug.Log(animator);
                 animator.SetFloat(_animIDSpeed, _animationBlend);
                 animator.SetFloat(_animIDMotionSpeed, inputMagnitude);
             }
