@@ -83,6 +83,7 @@ public class TransformationSwitcher : MonoBehaviour
         
         // Swap models
         playerMesh.SetActive(false);
+        transformationMesh.transform.localPosition = new Vector3(0, 0, 0);
         transformationMesh.SetActive(true);
         
         // Swap animator
