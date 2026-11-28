@@ -4884,13 +4884,13 @@ PrefabInstance:
       value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 8673667200246208346, guid: a4dc352053f7b504eb058542c6daa9b6, type: 3}
-      propertyPath: m_AnimatePhysics
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8673667200246208346, guid: a4dc352053f7b504eb058542c6daa9b6, type: 3}
       propertyPath: m_Avatar
       value: 
       objectReference: {fileID: 9000000, guid: 03f8ddefd91214f9eb381a40f1bbe98a, type: 3}
+    - target: {fileID: 8673667200246208346, guid: a4dc352053f7b504eb058542c6daa9b6, type: 3}
+      propertyPath: m_AnimatePhysics
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 8673667200246208346, guid: a4dc352053f7b504eb058542c6daa9b6, type: 3}
       propertyPath: m_ApplyRootMotion
       value: 0
